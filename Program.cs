@@ -1,7 +1,16 @@
+using CarRentalWebApp.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddSingleton<IVehicleRepo, FakeVehicleRepo>();
+    builder.Services.AddSingleton<IBookingRepo, FakeBookingRepo>();
+}
+
 
 var app = builder.Build();
 

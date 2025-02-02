@@ -1,0 +1,42 @@
+@model CarRentalWebApp.Models.Booking
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Booking</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="CustomerName" class="control-label">Customer Name</label>
+        <input asp-for="CustomerName" class="form-control" />
+        <span asp-validation-for="CustomerName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CollectionVehicleBranchID" class="control-label">Vehicle</label>
+        <select asp-for="CollectionVehicleBranchID" class="form-control" asp-items="@(new SelectList(ViewBag.Vehicles, "VehicleId", "Model"))"></select>
+        <span asp-validation-for="CollectionVehicleBranchID" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DropoffBranchId" class="control-label">Dropoff Branch</label>
+        <select asp-for="DropoffBranchId" class="form-control" asp-items="@(new SelectList(ViewBag.Branches, "BranchId", "City"))"></select>
+        <span asp-validation-for="DropoffBranchId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="StartTime" class="control-label">Start Date</label>
+        <input asp-for="StartTime" class="form-control" />
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EndTime" class="control-label">End Date</label>
+        <input asp-for="EndTime" class="form-control" />
+        <span asp-validation-for="EndTime" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

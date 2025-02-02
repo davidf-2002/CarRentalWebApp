@@ -1,0 +1,37 @@
+@model IEnumerable<CarRentalWebApp.Models.Booking>
+
+@{
+    ViewData["Title"] = "Bookings";
+}
+
+<h1>Bookings</h1>
+
+<input type="button" value="Create" onclick="location.href='@Url.Action("Create", "Booking")'" />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Booking ID</th>
+            <th>Customer Name</th>
+            <th>Vehicle</th>
+            <th>Pickup Branch</th>
+            <th>Dropoff Branch</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in Model)
+        {
+            <tr>
+                <td>@booking.BookingId</td>
+                <td>@booking.CustomerName</td>
+                <td>@booking.CollectionVehicleBranchID</td>
+                <td>@booking.CollectionVehicleBranchID</td>
+                <td>@booking.DropoffBranchId</td>
+                <td>@booking.StartTime</td>
+                <td>@booking.EndTime</td>
+            </tr>
+        }
+    </tbody>
+</table>

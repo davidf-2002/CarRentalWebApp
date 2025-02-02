@@ -9,7 +9,6 @@ public class RentalDBContext : DbContext
     public DbSet<Vehicle> Vehicles { get; set; } = null!;
     public DbSet<Branch> Branches { get; set; } = null!;
     public DbSet<VehicleBranch> VehicleBranches { get; set; } = null!;
-    public DbSet<Owner> Owners { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
