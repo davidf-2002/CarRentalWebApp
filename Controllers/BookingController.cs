@@ -23,14 +23,15 @@ public class BookingController : Controller
     public IActionResult Create()
     {
         var branches = _repo.GetAllBranches();
-        var vehicles = _repo.GetAllVehicleBranches()
-                             .Where(vb => vb.IsAvailable)
-                             .Select(vb => new { vb.VehicleId, vb.vehicle.Model })
-                             .Distinct()
-                             .ToList();
+        ViewBag.Branches = branches.Select(b => new { b.BranchId, b.Name }).ToList();
+        ViewBag.Vehicles = new List<object>(); // Initialize with an empty list
 
-        ViewBag.Branches = branches;
-        ViewBag.Vehicles = vehicles;
+        // Debugging statement
+        Console.WriteLine("Branches:");
+        foreach (var branch in ViewBag.Branches)
+        {
+            Console.WriteLine($"BranchId: {branch.BranchId}, Name: {branch.Name}");
+        }
 
         return View();
     }
@@ -41,19 +42,63 @@ public class BookingController : Controller
     {
         if (ModelState.IsValid)
         {
-            var pickupBranch = _repo.GetBranchById(booking.CollectionVehicleBranchID);
-            var dropoffBranch = _repo.GetBranchById(booking.DropoffBranchId);
+            Console.WriteLine($"Selected Branch ID: {booking.CollectionVehicleBranchID}");
 
-            if (pickupBranch == null || dropoffBranch == null)
+            // Retrieve the corresponding VehicleBranch using CollectionVehicleBranchID
+            var vehicleBranch = _repo.GetAllVehicleBranches()
+                                    .FirstOrDefault(vb => vb.BranchId == booking.CollectionVehicleBranchID && vb.VehicleId == booking.VehicleId);
+
+            if (vehicleBranch == null)
             {
-                return NotFound("Pickup or Dropoff branch not found.");
+                return NotFound("Vehicle Branch not found.");
             }
+
+            // Set the CollectionBranch property to the retrieved VehicleBranch
+            booking.CollectionBranch = vehicleBranch;
+
 
             _repo.AddBooking(booking);  // Add the booking using the fake repository
 
             return RedirectToAction("Details", new { id = booking.BookingId });
         }
+        
+        // Log ModelState errors
+        foreach (var state in ModelState)
+        {
+            foreach (var error in state.Value.Errors)
+            {
+                Console.WriteLine($"Error in {state.Key}: {error.ErrorMessage}");
+            }
+        }
 
+        // Repopulate ViewBag properties when returning the view after a failed form submission
+        var branches = _repo.GetAllBranches();
+        ViewBag.Branches = branches.Select(b => new { b.BranchId, b.Name }).ToList();
+        ViewBag.Vehicles = new List<object>(); // Initialize with an empty list
+        
         return View(booking);
+    }
+
+    // GET: /Booking/GetVehiclesByBranch
+    [HttpGet]
+    public async Task<IActionResult> GetVehiclesByBranch(int branchId)
+    {
+        var vehicleBranches = _repo.GetAllVehicleBranches()
+                                .Where(vb => vb.BranchId == branchId && vb.IsAvailable)
+                                .ToList();
+
+        var vehicles = new List<Vehicle>();
+
+        foreach (var vb in vehicleBranches)
+        {
+            var vehicle = await _repo.GetVehicleById(vb.VehicleId);
+            if (vehicle != null)
+            {
+                vehicles.Add(vehicle);
+            }
+        }
+
+        var vehicleModels = vehicles.Select(v => new { v.VehicleId, v.Model }).Distinct().ToList();
+        return Json(vehicleModels);
     }
 }

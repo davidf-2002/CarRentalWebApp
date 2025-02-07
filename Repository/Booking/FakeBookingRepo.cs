@@ -41,8 +41,8 @@ public class FakeBookingRepo : IBookingRepo
 
         Bookings = new List<Booking>
         {
-            new Booking { BookingId = 1, StartTime = DateTime.Now, EndTime = DateTime.Now.AddHours(2), CustomerName = "John Doe", CollectionVehicleBranchID = 1, DropoffBranchId = 2 },
-            new Booking { BookingId = 2, StartTime = DateTime.Now.AddHours(1), EndTime = DateTime.Now.AddHours(3), CustomerName = "Jane Smith", CollectionVehicleBranchID = 2, DropoffBranchId = 3 }
+            new Booking { BookingId = 1, StartTime = DateTime.Now, EndTime = DateTime.Now.AddHours(2), CustomerName = "John Smith", CollectionVehicleBranchID = 1, DropoffBranchId = 2 },
+            new Booking { BookingId = 2, StartTime = DateTime.Now.AddHours(1), EndTime = DateTime.Now.AddHours(3), CustomerName = "Jodie Thomas", CollectionVehicleBranchID = 2, DropoffBranchId = 3 }
         };
     }
 
@@ -86,6 +86,13 @@ public class FakeBookingRepo : IBookingRepo
             Bookings.Remove(booking);
         }
         return Task.CompletedTask;
+    }
+
+    // CRUD Methods for Vehicle
+    public Task<Vehicle> GetVehicleById(int id)
+    {
+        var vehicle = Vehicles.FirstOrDefault(v => v.VehicleId == id);
+        return Task.FromResult(vehicle);
     }
 
     // CRUD Methods for Branch

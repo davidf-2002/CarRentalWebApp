@@ -10,6 +10,8 @@ namespace CarRentalWebApp.Repository
         Task UpdateBooking(Booking booking);
         Task DeleteBooking(int bookingId);
 
+        public Task<Vehicle> GetVehicleById(int id);
+
         public Branch GetBranchById(int id);
         IEnumerable<Branch> GetAllBranches();
         IEnumerable<VehicleBranch> GetAllVehicleBranches();
