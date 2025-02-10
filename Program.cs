@@ -1,15 +1,32 @@
+using CarRentalWebApp.Data;
 using CarRentalWebApp.Repository;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+// Set database path
+var folder = Environment.SpecialFolder.MyDocuments;
+var path = Environment.GetFolderPath(folder);
+var DbPath = Path.Join(path, "CarRental.db");
+
+// Configure DBContext to use SQLite
+builder.Services.AddDbContext<DBContext>(options =>
+    options.UseSqlite($"Data Source={DbPath}"));
+
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddSingleton<IVehicleRepo, FakeVehicleRepo>();
-    builder.Services.AddSingleton<IBookingRepo, FakeBookingRepo>();
+    builder.Services.AddScoped<IVehicleRepo, VehicleRepo>();
+    builder.Services.AddScoped<IBookingRepo, BookingRepo>();
+    builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+    builder.Services.AddScoped<IVehicleBranchRepository, VehicleBranchRepository>();
 }
+
+// Register the BookingService
+builder.Services.AddScoped<BookingService>();
 
 
 var app = builder.Build();
