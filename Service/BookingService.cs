@@ -48,17 +48,27 @@ public class BookingService
         await _bookingRepo.UpdateBooking(booking);
 
         var vehicleBranches = await _vehicleBranchRepository.GetVehicleBranches();
-        var vehicleBranch = vehicleBranches.FirstOrDefault(vb => vb.VehicleBranchId == booking.CollectionVehicleBranchID);
-
-        if (vehicleBranch == null)
+        var collectionVehicleBranch = vehicleBranches.FirstOrDefault(vb => vb.VehicleBranchId == booking.CollectionVehicleBranchID);
+        
+        if (booking.DropoffBranchId != collectionVehicleBranch.BranchId)
         {
-            throw new InvalidOperationException($"VehicleBranch with ID {booking.CollectionVehicleBranchID} not found.");
+            // Create a new VehicleBranch object with the old vehicle and new branch
+            var newVehicleBranch = new VehicleBranch
+            {
+                VehicleId = collectionVehicleBranch.VehicleId,
+                BranchId = booking.DropoffBranchId.Value
+            };
+
+            // Add the new VehicleBranch to the repository
+            await _vehicleBranchRepository.AddVehicleBranch(newVehicleBranch);
+
+            // Mark the old VehicleBranch as unavailable
+            collectionVehicleBranch.IsAvailable = false;
+            await _vehicleBranchRepository.UpdateVehicleBranch(collectionVehicleBranch);
         }
         else
         {
-            // Mark the VehicleBranch as available
-            vehicleBranch.IsAvailable = true;
-            await _vehicleBranchRepository.UpdateVehicleBranch(vehicleBranch);
+            // make the VB object available
         }
     } 
 

@@ -50,9 +50,6 @@ public class BookingController : Controller
         {
             viewModel.Booking.CollectionVehicleBranch = VehicleBranch;
             Console.WriteLine($"VehicleBranch assigned: {viewModel.Booking.CollectionVehicleBranch.VehicleBranchId}");
-            
-            // Manually mark the CollectionVehicleBranch property as valid
-            ModelState.Remove("Booking.CollectionVehicleBranch");
         }
         else
         {
@@ -107,26 +104,10 @@ public class BookingController : Controller
     // POST: /Booking/EndConfirmed
     [HttpPost]
     public async Task<IActionResult> EndConfirmed(BookingViewModel bookingViewModel)
-    {
-        // Manually mark the CollectionVehicleBranch property as valid
-        //ModelState.Remove("Booking.CollectionVehicleBranch");
-
-        var booking = bookingViewModel.Booking;
-        if (booking == null)
-        {
-            Console.WriteLine("Booking not found");
-            return NotFound();
-        }
-
-        // Update the booking details
-        booking.EndTime = bookingViewModel.Booking.EndTime;
-        booking.DropoffBranchId = bookingViewModel.SelectedBranchId;
-        
+    {    
         if (ModelState.IsValid)
         {
-
-
-            await _service.EndBooking(booking);
+            await _service.EndBooking(bookingViewModel.Booking);
             Console.WriteLine("Booking ended successfully");
             return RedirectToAction("Index");
         }        
@@ -151,5 +132,4 @@ public class BookingController : Controller
         var vehicles = await _service.GetVehiclesByBranchAsync(branchId);
         return Json(vehicles);
     }
-
 }

@@ -18,11 +18,13 @@ public class VehicleBranchRepository : IVehicleBranchRepository
 
     public async Task UpdateVehicleBranch(VehicleBranch vehicleBranch)
     {
-        // var VbToChange = await _context.VehicleBranches.FindAsync(vehicleBranch.VehicleBranchId);
-        // if (VbToChange == null){
-        //     throw new KeyNotFoundException($"VehicleBranch with ID {vehicleBranch.VehicleBranchId} not found.");
-        // }
         _context.VehicleBranches.Update(vehicleBranch);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AddVehicleBranch(VehicleBranch vehicleBranch)
+    {
+        await _context.VehicleBranches.AddAsync(vehicleBranch);
         await _context.SaveChangesAsync();
     }
 }

@@ -32,12 +32,18 @@ public class BookingRepo : IBookingRepo
 
     public async Task<List<Booking>> GetAllBookings()
     {
-        return await _context.Bookings.ToListAsync();
+        return await _context.Bookings
+                        .Include(b => b.CollectionVehicleBranch) // Eagerly load VehicleBranch
+                        .Include(b => b.DropoffBranch)
+                        .ToListAsync();
     }
 
     public async Task<Booking> GetBookingById(int id)
     {
-        var booking = await _context.Bookings.FindAsync(id);
+        var booking = await _context.Bookings
+                                    .Include(b => b.CollectionVehicleBranch)
+                                    .Include(b => b.DropoffBranch)
+                                    .FirstOrDefaultAsync(b => b.BookingId == id);
         if (booking == null)
         {
             throw new KeyNotFoundException($"Booking with ID {id} not found.");

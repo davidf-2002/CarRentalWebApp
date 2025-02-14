@@ -27,11 +27,11 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="SelectedBranchId" class="control-label">Drop-off Branch</label>
-        <select asp-for="SelectedBranchId" class="form-control" asp-items="Model.Branches">
+        <label asp-for="Booking.DropoffBranchId" class="control-label">Drop-off Branch</label>
+        <select asp-for="Booking.DropoffBranchId" class="form-control" asp-items="Model.Branches">
             <option value="">-- Select a Branch --</option>
         </select>
-        <span asp-validation-for="SelectedBranchId" class="text-danger"></span>
+        <span asp-validation-for="Booking.DropoffBranchId" class="text-danger"></span>
     </div>
 
     <div class="form-group">
