@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 
 
 // Set database path
-var DbPath = Path.Combine(builder.Environment.ContentRootPath, "CarRental.db");
+var DbPath = Path.Combine(builder.Environment.ContentRootPath, "CarRentals.db");
 
 // Configure DBContext to use SQLite
 builder.Services.AddDbContext<DBContext>(options =>

@@ -33,16 +33,18 @@ public class BookingRepo : IBookingRepo
     public async Task<List<Booking>> GetAllBookings()
     {
         return await _context.Bookings
-                        .Include(b => b.CollectionVehicleBranch) // Eagerly load VehicleBranch
+                        .Include(b => b.PickupBranch) // Eagerly load PickupBranch
                         .Include(b => b.DropoffBranch)
+                        .Include(b => b.Vehicle)
                         .ToListAsync();
     }
 
     public async Task<Booking> GetBookingById(int id)
     {
         var booking = await _context.Bookings
-                                    .Include(b => b.CollectionVehicleBranch)
-                                    .Include(b => b.DropoffBranch)
+                        .Include(b => b.PickupBranch) 
+                        .Include(b => b.DropoffBranch)
+                        .Include(b => b.Vehicle)
                                     .FirstOrDefaultAsync(b => b.BookingId == id);
         if (booking == null)
         {
@@ -63,8 +65,9 @@ public class BookingRepo : IBookingRepo
         existingBooking.StartTime = booking.StartTime;
         existingBooking.EndTime = booking.EndTime;
         existingBooking.CustomerName = booking.CustomerName;
-        existingBooking.CollectionVehicleBranchID = booking.CollectionVehicleBranchID;
+        existingBooking.PickupBranchId = booking.PickupBranchId;
         existingBooking.DropoffBranchId = booking.DropoffBranchId;
+        existingBooking.VehicleId = booking.VehicleId;
 
         // Update the entity in the context
         _context.Bookings.Update(existingBooking);

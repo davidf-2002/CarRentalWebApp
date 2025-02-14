@@ -8,7 +8,8 @@
 
 <form asp-action="EndConfirmed" method="post">
     <input type="hidden" asp-for="Booking.BookingId" />
-    <input type="hidden" asp-for="Booking.CollectionVehicleBranchID" />
+    <input type="hidden" asp-for="Booking.PickupBranchId" />
+    <input type="hidden" asp-for="Booking.VehicleId" />
 
     <div class="form-group">
         <label asp-for="Booking.CustomerName" class="control-label">Customer Name</label>

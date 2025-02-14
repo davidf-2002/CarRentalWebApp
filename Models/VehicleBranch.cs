@@ -8,10 +8,7 @@ public class VehicleBranch
     public int VehicleBranchId { get; set; }
     public int Rate { get; set; }    
     public int BranchId { get; set; }
-    public Branch branch { get; set; } 
+    public Branch? Branch { get; set; } 
     public int VehicleId { get; set; }
-    public Vehicle vehicle { get; set; }
-    public bool IsAvailable { get; set; }
-    
-    public List<Booking> Bookings { get; set; }
+    public Vehicle? Vehicle { get; set; }
 }

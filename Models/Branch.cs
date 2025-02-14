@@ -13,5 +13,4 @@ public class Branch
     
     public List<VehicleBranch> VehicleBranches { get; set; }
 
-    public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 }

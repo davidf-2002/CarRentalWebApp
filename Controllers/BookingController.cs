@@ -43,30 +43,34 @@ public class BookingController : Controller
         var selectedBranchId = viewModel.SelectedBranchId;
         var selectedVehicleId = viewModel.SelectedVehicleId;
 
-        // Call the service to get the VehicleBranch
-        var VehicleBranch = await _service.GetVehicleBranchAsync(selectedVehicleId, selectedBranchId);
-
-        if (VehicleBranch != null)
-        {
-            viewModel.Booking.CollectionVehicleBranch = VehicleBranch;
-            Console.WriteLine($"VehicleBranch assigned: {viewModel.Booking.CollectionVehicleBranch.VehicleBranchId}");
-        }
-        else
-        {
-            Console.WriteLine("No VehicleBranch found!");
-        }
+        viewModel.Booking.PickupBranchId = selectedBranchId;
+        viewModel.Booking.VehicleId = selectedVehicleId;
 
         if (ModelState.IsValid)
         {
-            var booking = viewModel.Booking; // Map ViewModel back to Booking model
+            // Check if VehicleBranch exists for selected Vehicle & Branch
+            bool isAssigned = await _service.IsVehicleAssignedToBranch(selectedVehicleId, selectedBranchId);
+            
+            if (!isAssigned)
+            {
+                ModelState.AddModelError("", "The selected vehicle is not assigned to this branch.");
+                
+                // Reload dropdowns before returning to the view
+                viewModel.Branches = await _service.GetBranchesAsync();
+                viewModel.Vehicles = await _service.GetVehiclesByBranchAsync(selectedBranchId);
 
+                return View(viewModel);
+            }
+
+            // Create Booking
+            var booking = viewModel.Booking; // Map ViewModel back to Booking model
             await _service.CreateBooking(booking);
 
             return RedirectToAction("Index");
         }
         else
         {
-            // Log the model state errors
+            // Log model state errors for debugging
             foreach (var state in ModelState)
             {
                 foreach (var error in state.Value.Errors)
@@ -75,7 +79,7 @@ public class BookingController : Controller
                 }
             }
 
-            // If the model is invalid, reload the dropdowns and return view
+            // Reload dropdowns and return view
             viewModel.Branches = await _service.GetBranchesAsync();
             viewModel.Vehicles = new List<SelectListItem>();
             return View(viewModel);

@@ -13,8 +13,11 @@ public class Booking
     [Required]
     public string CustomerName { get; set; }
 
-    public int CollectionVehicleBranchID { get; set; }
-    public VehicleBranch? CollectionVehicleBranch { get; set; }
+    public int VehicleId { get; set; }
+    public Vehicle? Vehicle { get; set ; }
+
+    public int PickupBranchId { get; set; }
+    public Branch? PickupBranch { get; set ;}
 
     // Optional Drop off information
     public int? DropoffBranchId { get; set; }
