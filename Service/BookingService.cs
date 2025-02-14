@@ -56,15 +56,12 @@ public class BookingService
             var newVehicleBranch = new VehicleBranch
             {
                 VehicleId = collectionVehicleBranch.VehicleId,
-                BranchId = booking.DropoffBranchId.Value
+                BranchId = booking.DropoffBranchId.Value,
+                IsAvailable = true
             };
 
             // Add the new VehicleBranch to the repository
             await _vehicleBranchRepository.AddVehicleBranch(newVehicleBranch);
-
-            // Mark the old VehicleBranch as unavailable
-            collectionVehicleBranch.IsAvailable = false;
-            await _vehicleBranchRepository.UpdateVehicleBranch(collectionVehicleBranch);
         }
         else
         {
