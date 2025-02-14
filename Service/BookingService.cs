@@ -44,7 +44,22 @@ public class BookingService
 
     public async Task EndBooking(Booking booking)
     {
-        
+        // Update the booking
+        await _bookingRepo.UpdateBooking(booking);
+
+        var vehicleBranches = await _vehicleBranchRepository.GetVehicleBranches();
+        var vehicleBranch = vehicleBranches.FirstOrDefault(vb => vb.VehicleBranchId == booking.CollectionVehicleBranchID);
+
+        if (vehicleBranch == null)
+        {
+            throw new InvalidOperationException($"VehicleBranch with ID {booking.CollectionVehicleBranchID} not found.");
+        }
+        else
+        {
+            // Mark the VehicleBranch as available
+            vehicleBranch.IsAvailable = true;
+            await _vehicleBranchRepository.UpdateVehicleBranch(vehicleBranch);
+        }
     } 
 
     public async Task<List<SelectListItem>> GetBranchesAsync()
@@ -78,5 +93,22 @@ public class BookingService
             }
         }
         return vehicles;
+    }
+
+    public async Task<VehicleBranch> GetVehicleBranchAsync(int vehicleId, int branchId)
+    {
+        var VehicleBranches = await _vehicleBranchRepository.GetVehicleBranches();
+        var VehicleBranch = VehicleBranches.FirstOrDefault(vb => vb.BranchId == branchId && vb.VehicleId == vehicleId);
+        if (VehicleBranch == null)
+        {
+            throw new InvalidOperationException($"VehicleBranch with VehicleId {vehicleId} and BranchId {branchId} not found.");
+        }
+        return VehicleBranch;
+    }
+
+    public async Task<IEnumerable<Booking>> GetAllBookings()
+    {
+        var bookings = await _bookingRepo.GetAllBookings();
+        return bookings;
     }
 }

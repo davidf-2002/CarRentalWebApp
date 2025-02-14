@@ -20,8 +20,7 @@ namespace CarRentalWebApp.Migrations
                     BranchId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    City = table.Column<string>(type: "TEXT", nullable: false),
-                    VehicleBranchId = table.Column<int>(type: "INTEGER", nullable: false)
+                    City = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,8 +36,7 @@ namespace CarRentalWebApp.Migrations
                     Make = table.Column<string>(type: "TEXT", nullable: false),
                     Model = table.Column<string>(type: "TEXT", nullable: false),
                     Type = table.Column<string>(type: "TEXT", nullable: false),
-                    Year = table.Column<int>(type: "INTEGER", nullable: false),
-                    VehicleBranchId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Year = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,23 +107,23 @@ namespace CarRentalWebApp.Migrations
 
             migrationBuilder.InsertData(
                 table: "Branches",
-                columns: new[] { "BranchId", "City", "Name", "VehicleBranchId" },
+                columns: new[] { "BranchId", "City", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Austin", "Austin Branch", 0 },
-                    { 2, "Dallas", "Dallas Branch", 0 },
-                    { 3, "Houston", "Houston Branch", 0 }
+                    { 1, "Austin", "Austin Branch" },
+                    { 2, "Dallas", "Dallas Branch" },
+                    { 3, "Houston", "Houston Branch" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Vehicles",
-                columns: new[] { "VehicleId", "Make", "Model", "Type", "VehicleBranchId", "Year" },
+                columns: new[] { "VehicleId", "Make", "Model", "Type", "Year" },
                 values: new object[,]
                 {
-                    { 1, "BMW", "320d", "Sedan", 0, 2017 },
-                    { 2, "Audi", "A4", "Sedan", 0, 2018 },
-                    { 3, "Tesla", "Model S", "Sedan", 0, 2020 },
-                    { 4, "Toyota", "Prius", "Hatchback", 0, 2019 }
+                    { 1, "BMW", "320d", "Sedan", 2017 },
+                    { 2, "Audi", "A4", "Sedan", 2018 },
+                    { 3, "Tesla", "Model S", "Sedan", 2020 },
+                    { 4, "Toyota", "Prius", "Hatchback", 2019 }
                 });
 
             migrationBuilder.InsertData(
@@ -133,10 +131,10 @@ namespace CarRentalWebApp.Migrations
                 columns: new[] { "VehicleBranchId", "BranchId", "IsAvailable", "Rate", "VehicleId" },
                 values: new object[,]
                 {
-                    { 1, 1, false, 0, 1 },
-                    { 2, 2, false, 0, 2 },
-                    { 3, 3, false, 0, 3 },
-                    { 4, 1, false, 0, 4 }
+                    { 1, 1, true, 100, 1 },
+                    { 2, 2, true, 120, 2 },
+                    { 3, 3, true, 90, 3 },
+                    { 4, 1, false, 140, 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -144,9 +142,9 @@ namespace CarRentalWebApp.Migrations
                 columns: new[] { "BookingId", "CollectionVehicleBranchID", "CustomerName", "DropoffBranchId", "EndTime", "StartTime", "VehicleId" },
                 values: new object[,]
                 {
-                    { 1, 1, "John Smith", 2, null, new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { 2, 2, "Matthew Johnson", 3, null, new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { 3, 3, "Harry Brown", 1, null, new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), null }
+                    { 1, 2, "John Smith", 2, new DateTime(2025, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { 2, 3, "Matthew Johnson", 3, new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { 3, 1, "Harry Brown", 1, new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), null }
                 });
 
             migrationBuilder.CreateIndex(

@@ -17,12 +17,6 @@ public class Vehicle
     [Required]
     public int Year { get; set; }
 
-
-    // public int BranchId { get; set; }
-    // public Branch Branch { get; set; }
-
-
-    public int VehicleBranchId { get; set; }
     public List<VehicleBranch> VehicleBranches { get; set; }
 
     public ICollection<Booking> Bookings { get; set; } = new List<Booking>();

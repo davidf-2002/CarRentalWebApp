@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalWebApp.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20250209183641_InitialCreate")]
+    [Migration("20250211233344_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -59,25 +59,28 @@ namespace CarRentalWebApp.Migrations
                         new
                         {
                             BookingId = 1,
-                            CollectionVehicleBranchID = 1,
+                            CollectionVehicleBranchID = 2,
                             CustomerName = "John Smith",
                             DropoffBranchId = 2,
+                            EndTime = new DateTime(2025, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             BookingId = 2,
-                            CollectionVehicleBranchID = 2,
+                            CollectionVehicleBranchID = 3,
                             CustomerName = "Matthew Johnson",
                             DropoffBranchId = 3,
+                            EndTime = new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             BookingId = 3,
-                            CollectionVehicleBranchID = 3,
+                            CollectionVehicleBranchID = 1,
                             CustomerName = "Harry Brown",
                             DropoffBranchId = 1,
+                            EndTime = new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             StartTime = new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -96,9 +99,6 @@ namespace CarRentalWebApp.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("VehicleBranchId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("BranchId");
 
                     b.ToTable("Branches");
@@ -108,22 +108,19 @@ namespace CarRentalWebApp.Migrations
                         {
                             BranchId = 1,
                             City = "Austin",
-                            Name = "Austin Branch",
-                            VehicleBranchId = 0
+                            Name = "Austin Branch"
                         },
                         new
                         {
                             BranchId = 2,
                             City = "Dallas",
-                            Name = "Dallas Branch",
-                            VehicleBranchId = 0
+                            Name = "Dallas Branch"
                         },
                         new
                         {
                             BranchId = 3,
                             City = "Houston",
-                            Name = "Houston Branch",
-                            VehicleBranchId = 0
+                            Name = "Houston Branch"
                         });
                 });
 
@@ -145,9 +142,6 @@ namespace CarRentalWebApp.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("VehicleBranchId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("Year")
                         .HasColumnType("INTEGER");
 
@@ -162,7 +156,6 @@ namespace CarRentalWebApp.Migrations
                             Make = "BMW",
                             Model = "320d",
                             Type = "Sedan",
-                            VehicleBranchId = 0,
                             Year = 2017
                         },
                         new
@@ -171,7 +164,6 @@ namespace CarRentalWebApp.Migrations
                             Make = "Audi",
                             Model = "A4",
                             Type = "Sedan",
-                            VehicleBranchId = 0,
                             Year = 2018
                         },
                         new
@@ -180,7 +172,6 @@ namespace CarRentalWebApp.Migrations
                             Make = "Tesla",
                             Model = "Model S",
                             Type = "Sedan",
-                            VehicleBranchId = 0,
                             Year = 2020
                         },
                         new
@@ -189,7 +180,6 @@ namespace CarRentalWebApp.Migrations
                             Make = "Toyota",
                             Model = "Prius",
                             Type = "Hatchback",
-                            VehicleBranchId = 0,
                             Year = 2019
                         });
                 });
@@ -223,24 +213,24 @@ namespace CarRentalWebApp.Migrations
                         {
                             VehicleBranchId = 1,
                             BranchId = 1,
-                            IsAvailable = false,
-                            Rate = 0,
+                            IsAvailable = true,
+                            Rate = 100,
                             VehicleId = 1
                         },
                         new
                         {
                             VehicleBranchId = 2,
                             BranchId = 2,
-                            IsAvailable = false,
-                            Rate = 0,
+                            IsAvailable = true,
+                            Rate = 120,
                             VehicleId = 2
                         },
                         new
                         {
                             VehicleBranchId = 3,
                             BranchId = 3,
-                            IsAvailable = false,
-                            Rate = 0,
+                            IsAvailable = true,
+                            Rate = 90,
                             VehicleId = 3
                         },
                         new
@@ -248,7 +238,7 @@ namespace CarRentalWebApp.Migrations
                             VehicleBranchId = 4,
                             BranchId = 1,
                             IsAvailable = false,
-                            Rate = 0,
+                            Rate = 140,
                             VehicleId = 4
                         });
                 });

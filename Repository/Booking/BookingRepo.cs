@@ -52,7 +52,17 @@ public class BookingRepo : IBookingRepo
         {
             throw new KeyNotFoundException($"Booking with ID {booking.BookingId} not found.");
         }
+
+        // Copy the properties from the passed booking to the existing booking
+        existingBooking.StartTime = booking.StartTime;
+        existingBooking.EndTime = booking.EndTime;
+        existingBooking.CustomerName = booking.CustomerName;
+        existingBooking.CollectionVehicleBranchID = booking.CollectionVehicleBranchID;
+        existingBooking.DropoffBranchId = booking.DropoffBranchId;
+
+        // Update the entity in the context
         _context.Bookings.Update(existingBooking);
         await _context.SaveChangesAsync();
     }
+
 }

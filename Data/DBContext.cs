@@ -72,20 +72,20 @@ public class DBContext : DbContext
         modelBuilder.Entity<Branch>().HasData(
             new Branch { BranchId = 1, City = "Austin", Name = "Austin Branch" },
             new Branch { BranchId = 2, City = "Dallas", Name = "Dallas Branch" },
-            new Branch { BranchId = 3, City = "Houston", Name = "Houston Branch" }
+            new Branch { BranchId = 3, City = "Houston", Name = "Houston Branch",  }
         );
 
         modelBuilder.Entity<VehicleBranch>().HasData(
-            new VehicleBranch { VehicleBranchId = 1, VehicleId = 1, BranchId = 1 },
-            new VehicleBranch { VehicleBranchId = 2, VehicleId = 2, BranchId = 2 },
-            new VehicleBranch { VehicleBranchId = 3, VehicleId = 3, BranchId = 3 },
-            new VehicleBranch { VehicleBranchId = 4, VehicleId = 4, BranchId = 1 }
+            new VehicleBranch { VehicleBranchId = 1, VehicleId = 1, BranchId = 1, Rate = 100 , IsAvailable = true },
+            new VehicleBranch { VehicleBranchId = 2, VehicleId = 2, BranchId = 2, Rate = 120, IsAvailable = true },
+            new VehicleBranch { VehicleBranchId = 3, VehicleId = 3, BranchId = 3, Rate = 90, IsAvailable = true },
+            new VehicleBranch { VehicleBranchId = 4, VehicleId = 4, BranchId = 1, Rate = 140, IsAvailable = false }
         );
 
         modelBuilder.Entity<Booking>().HasData(
-            new Booking { BookingId = 1, CustomerName = "John Smith", CollectionVehicleBranchID = 1, DropoffBranchId = 2, StartTime = new DateTime(2025, 2, 1) },
-            new Booking { BookingId = 2, CustomerName = "Matthew Johnson", CollectionVehicleBranchID = 2, DropoffBranchId = 3, StartTime = new DateTime(2025, 2, 2) },
-            new Booking { BookingId = 3, CustomerName = "Harry Brown", CollectionVehicleBranchID = 3, DropoffBranchId = 1, StartTime = new DateTime(2025, 2, 3) }
+            new Booking { BookingId = 1, CustomerName = "John Smith", CollectionVehicleBranchID = 2, DropoffBranchId = 2, StartTime = new DateTime(2025, 2, 1), EndTime = new DateTime(2025, 2, 11) },
+            new Booking { BookingId = 2, CustomerName = "Matthew Johnson", CollectionVehicleBranchID = 3, DropoffBranchId = 3, StartTime = new DateTime(2025, 2, 2), EndTime = new DateTime(2025, 2, 5) },
+            new Booking { BookingId = 3, CustomerName = "Harry Brown", CollectionVehicleBranchID = 1, DropoffBranchId = 1, StartTime = new DateTime(2025, 2, 3), EndTime = new DateTime(2025, 2, 6) }
         );
     }
 }
