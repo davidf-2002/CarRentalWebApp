@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "End Booking";
+    var currentDateTime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
 }
 
 <h1>End Booking</h1>
@@ -23,7 +24,7 @@
 
     <div class="form-group">
         <label asp-for="Booking.EndTime" class="control-label">End Time</label>
-        <input asp-for="Booking.EndTime" class="form-control" />
+        <input asp-for="Booking.EndTime" class="form-control" value="@currentDateTime"/>
         <span asp-validation-for="Booking.EndTime" class="text-danger"></span>
     </div>
 

@@ -11,4 +11,5 @@ public class VehicleBranch
     public Branch? Branch { get; set; } 
     public int VehicleId { get; set; }
     public Vehicle? Vehicle { get; set; }
+    public bool IsAvailable { get; set; }
 }

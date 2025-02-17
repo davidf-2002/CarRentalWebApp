@@ -23,6 +23,8 @@ public class BranchRepository : IBranchRepository
         if (BranchToDelete == null){
             throw new KeyNotFoundException($"Branch with ID {id} not found.");
         }
+        _context.Branches.Remove(BranchToDelete);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<Branch> GetBranch(int id)
@@ -38,14 +40,5 @@ public class BranchRepository : IBranchRepository
     {
         var Branches = await _context.Branches.ToListAsync();
         return Branches;
-    }
-
-    public async Task UpdateBranch(Branch branch)
-    {
-        var BranchToUpdate = await _context.FindAsync<Branch>(branch.BranchId);
-        if (BranchToUpdate == null){
-            throw new KeyNotFoundException($"Branch with ID {branch.BranchId} not found.");
-        }
-        await _context.AddAsync(BranchToUpdate);
     }
 }

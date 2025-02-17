@@ -30,17 +30,6 @@ public class VehicleRepo : IVehicleRepo
         return vehicles;
     }
 
-    public async Task UpdateVehicle(Vehicle vehicle)
-    {
-        var ChangingVehicle = await _context.Vehicles.FindAsync(vehicle.VehicleId);
-        if (ChangingVehicle == null)
-        {
-            throw new KeyNotFoundException($"Vehicle with ID {vehicle.VehicleId} not found.");
-        }
-        _context.Vehicles.Update(ChangingVehicle);
-        await _context.SaveChangesAsync();
-    }
-
     public async Task DeleteVehicle(int id)
     {
         var DeletingVehicle = await _context.Vehicles.FindAsync(id);

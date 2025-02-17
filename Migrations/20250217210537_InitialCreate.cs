@@ -86,7 +86,8 @@ namespace CarRentalWebApp.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Rate = table.Column<int>(type: "INTEGER", nullable: false),
                     BranchId = table.Column<int>(type: "INTEGER", nullable: false),
-                    VehicleId = table.Column<int>(type: "INTEGER", nullable: false)
+                    VehicleId = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -132,21 +133,25 @@ namespace CarRentalWebApp.Migrations
                 columns: new[] { "BookingId", "CustomerName", "DropoffBranchId", "EndTime", "PickupBranchId", "StartTime", "VehicleId" },
                 values: new object[,]
                 {
-                    { 1, "John Smith", 4, new DateTime(2025, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { 2, "Matthew Johnson", 2, new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
-                    { 3, "Harry Brown", 1, new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
-                    { 4, "Paul Johnson", 3, new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 4 }
+                    { 1, "John Smith", 4, new DateTime(2025, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
+                    { 2, "Matthew Johnson", 3, new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
+                    { 3, "Harry Brown", 2, new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
+                    { 4, "Paul Johnson", 1, new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 4 }
                 });
 
             migrationBuilder.InsertData(
                 table: "VehicleBranches",
-                columns: new[] { "VehicleBranchId", "BranchId", "Rate", "VehicleId" },
+                columns: new[] { "VehicleBranchId", "BranchId", "IsAvailable", "Rate", "VehicleId" },
                 values: new object[,]
                 {
-                    { 1, 4, 100, 1 },
-                    { 2, 2, 120, 2 },
-                    { 3, 1, 90, 3 },
-                    { 4, 3, 140, 4 }
+                    { 1, 4, true, 110, 1 },
+                    { 2, 3, true, 125, 2 },
+                    { 3, 2, true, 95, 3 },
+                    { 4, 1, true, 135, 4 },
+                    { 5, 1, false, 105, 1 },
+                    { 6, 2, false, 88, 2 },
+                    { 7, 3, false, 120, 3 },
+                    { 8, 4, false, 130, 4 }
                 });
 
             migrationBuilder.CreateIndex(

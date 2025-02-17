@@ -10,6 +10,15 @@ public class VehicleBranchRepository : IVehicleBranchRepository
         _context = context;
     }
 
+    public async Task<VehicleBranch> GetVehicleBranch(int id)
+    {
+        var vehicleBranch = await _context.FindAsync<VehicleBranch>(id);
+        if (vehicleBranch == null){
+            throw new KeyNotFoundException($"Vehicle Branch with ID {id} not found.");
+        }
+        return vehicleBranch;
+    }
+    
     public async Task<IEnumerable<VehicleBranch>> GetVehicleBranches()
     {
         var vehicleBranches = await _context.VehicleBranches.ToListAsync();
@@ -22,9 +31,19 @@ public class VehicleBranchRepository : IVehicleBranchRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task AddVehicleBranch(VehicleBranch vehicleBranch)
+    public async Task CreateVehicleBranch(VehicleBranch vehicleBranch)
     {
         await _context.VehicleBranches.AddAsync(vehicleBranch);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteVehicleBranch(int id)
+    {
+        var vbToDelete = await _context.VehicleBranches.FindAsync(id);
+        if (vbToDelete == null){
+            throw new KeyNotFoundException($"Vehicle Branch with ID {id} not found.");
+        }
+        _context.VehicleBranches.Remove(vbToDelete);
         await _context.SaveChangesAsync();
     }
 }

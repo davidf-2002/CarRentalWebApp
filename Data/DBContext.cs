@@ -45,6 +45,10 @@ public class DBContext : DbContext
             .WithOne(vb => vb.Branch)
             .HasForeignKey(vb => vb.BranchId);
 
+        // VehicleBranch configuration
+        modelBuilder.Entity<VehicleBranch>()
+            .Property(vb => vb.IsAvailable)
+            .HasDefaultValue(true);
 
         // Booking configuration
         modelBuilder.Entity<Booking>()
@@ -83,18 +87,22 @@ public class DBContext : DbContext
             new Branch { BranchId = 4, City = "Phoenix", Name = "Phoenix Branch" }
         );
 
-        modelBuilder.Entity<VehicleBranch>().HasData(
-            new VehicleBranch { VehicleBranchId = 1, VehicleId = 1, BranchId = 4, Rate = 100 },
-            new VehicleBranch { VehicleBranchId = 2, VehicleId = 2, BranchId = 2, Rate = 120 },
-            new VehicleBranch { VehicleBranchId = 3, VehicleId = 3, BranchId = 1, Rate = 90 },
-            new VehicleBranch { VehicleBranchId = 4, VehicleId = 4, BranchId = 3, Rate = 140 }
+        modelBuilder.Entity<VehicleBranch>().HasData(  
+            new VehicleBranch { VehicleBranchId = 1, VehicleId = 1, BranchId = 4, Rate = 110, IsAvailable = true },
+            new VehicleBranch { VehicleBranchId = 2, VehicleId = 2, BranchId = 3, Rate = 125, IsAvailable = true },
+            new VehicleBranch { VehicleBranchId = 3, VehicleId = 3, BranchId = 2, Rate = 95, IsAvailable = true },
+            new VehicleBranch { VehicleBranchId = 4, VehicleId = 4, BranchId = 1, Rate = 135, IsAvailable = true },
+            new VehicleBranch { VehicleBranchId = 5, VehicleId = 1, BranchId = 1, Rate = 105, IsAvailable = false },
+            new VehicleBranch { VehicleBranchId = 6, VehicleId = 2, BranchId = 2, Rate = 88, IsAvailable = false },
+            new VehicleBranch { VehicleBranchId = 7, VehicleId = 3, BranchId = 3, Rate = 120, IsAvailable = false },
+            new VehicleBranch { VehicleBranchId = 8, VehicleId = 4, BranchId = 4, Rate = 130, IsAvailable = false }  
         );
 
         modelBuilder.Entity<Booking>().HasData(
-            new Booking { BookingId = 1, CustomerName = "John Smith", VehicleId = 1, PickupBranchId = 2, DropoffBranchId = 4, StartTime = new DateTime(2025, 2, 1), EndTime = new DateTime(2025, 2, 11) },
-            new Booking { BookingId = 2, CustomerName = "Matthew Johnson", VehicleId = 2, PickupBranchId = 2, DropoffBranchId = 2, StartTime = new DateTime(2025, 2, 2), EndTime = new DateTime(2025, 2, 5) },
-            new Booking { BookingId = 3, CustomerName = "Harry Brown", VehicleId = 3, PickupBranchId = 4, DropoffBranchId = 1, StartTime = new DateTime(2025, 2, 3), EndTime = new DateTime(2025, 2, 6) },
-            new Booking { BookingId = 4, CustomerName = "Paul Johnson", VehicleId = 4, PickupBranchId = 3, DropoffBranchId = 3, StartTime = new DateTime(2025, 2, 3), EndTime = new DateTime(2025, 2, 6) }
+            new Booking { BookingId = 1, CustomerName = "John Smith", VehicleId = 1, PickupBranchId = 1, DropoffBranchId = 4, StartTime = new DateTime(2025, 2, 1), EndTime = new DateTime(2025, 2, 11) },
+            new Booking { BookingId = 2, CustomerName = "Matthew Johnson", VehicleId = 2, PickupBranchId = 2, DropoffBranchId = 3, StartTime = new DateTime(2025, 2, 2), EndTime = new DateTime(2025, 2, 5) },
+            new Booking { BookingId = 3, CustomerName = "Harry Brown", VehicleId = 3, PickupBranchId = 3, DropoffBranchId = 2, StartTime = new DateTime(2025, 2, 3), EndTime = new DateTime(2025, 2, 6) },
+            new Booking { BookingId = 4, CustomerName = "Paul Johnson", VehicleId = 4, PickupBranchId = 4, DropoffBranchId = 1, StartTime = new DateTime(2025, 2, 3), EndTime = new DateTime(2025, 2, 6) }
         );
     }
 }

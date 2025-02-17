@@ -7,6 +7,7 @@ namespace CarRentalWebApp.Models;
 public class Vehicle
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int VehicleId { get; set; }
     [Required]
     public string Make { get; set; }

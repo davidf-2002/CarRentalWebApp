@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalWebApp.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20250214215019_InitialCreate")]
+    [Migration("20250217210537_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -62,7 +62,7 @@ namespace CarRentalWebApp.Migrations
                             CustomerName = "John Smith",
                             DropoffBranchId = 4,
                             EndTime = new DateTime(2025, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PickupBranchId = 2,
+                            PickupBranchId = 1,
                             StartTime = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             VehicleId = 1
                         },
@@ -70,7 +70,7 @@ namespace CarRentalWebApp.Migrations
                         {
                             BookingId = 2,
                             CustomerName = "Matthew Johnson",
-                            DropoffBranchId = 2,
+                            DropoffBranchId = 3,
                             EndTime = new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PickupBranchId = 2,
                             StartTime = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -80,9 +80,9 @@ namespace CarRentalWebApp.Migrations
                         {
                             BookingId = 3,
                             CustomerName = "Harry Brown",
-                            DropoffBranchId = 1,
+                            DropoffBranchId = 2,
                             EndTime = new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PickupBranchId = 4,
+                            PickupBranchId = 3,
                             StartTime = new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             VehicleId = 3
                         },
@@ -90,9 +90,9 @@ namespace CarRentalWebApp.Migrations
                         {
                             BookingId = 4,
                             CustomerName = "Paul Johnson",
-                            DropoffBranchId = 3,
+                            DropoffBranchId = 1,
                             EndTime = new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PickupBranchId = 3,
+                            PickupBranchId = 4,
                             StartTime = new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             VehicleId = 4
                         });
@@ -212,6 +212,9 @@ namespace CarRentalWebApp.Migrations
                     b.Property<int>("BranchId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Rate")
                         .HasColumnType("INTEGER");
 
@@ -231,28 +234,64 @@ namespace CarRentalWebApp.Migrations
                         {
                             VehicleBranchId = 1,
                             BranchId = 4,
-                            Rate = 100,
+                            IsAvailable = true,
+                            Rate = 110,
                             VehicleId = 1
                         },
                         new
                         {
                             VehicleBranchId = 2,
-                            BranchId = 2,
-                            Rate = 120,
+                            BranchId = 3,
+                            IsAvailable = true,
+                            Rate = 125,
                             VehicleId = 2
                         },
                         new
                         {
                             VehicleBranchId = 3,
-                            BranchId = 1,
-                            Rate = 90,
+                            BranchId = 2,
+                            IsAvailable = true,
+                            Rate = 95,
                             VehicleId = 3
                         },
                         new
                         {
                             VehicleBranchId = 4,
+                            BranchId = 1,
+                            IsAvailable = true,
+                            Rate = 135,
+                            VehicleId = 4
+                        },
+                        new
+                        {
+                            VehicleBranchId = 5,
+                            BranchId = 1,
+                            IsAvailable = false,
+                            Rate = 105,
+                            VehicleId = 1
+                        },
+                        new
+                        {
+                            VehicleBranchId = 6,
+                            BranchId = 2,
+                            IsAvailable = false,
+                            Rate = 88,
+                            VehicleId = 2
+                        },
+                        new
+                        {
+                            VehicleBranchId = 7,
                             BranchId = 3,
-                            Rate = 140,
+                            IsAvailable = false,
+                            Rate = 120,
+                            VehicleId = 3
+                        },
+                        new
+                        {
+                            VehicleBranchId = 8,
+                            BranchId = 4,
+                            IsAvailable = false,
+                            Rate = 130,
                             VehicleId = 4
                         });
                 });

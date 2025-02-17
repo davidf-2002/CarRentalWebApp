@@ -7,11 +7,11 @@ using Microsoft.VisualBasic;
 public class BookingService
 {
     private readonly IBookingRepo _bookingRepo;
-    private readonly IVehicleRepo _vehicleRepo;
     private readonly IBranchRepository _branchRepository;
     private readonly IVehicleBranchRepository _vehicleBranchRepository;
+    private readonly IVehicleRepo _vehicleRepo;
 
-    public BookingService(IBookingRepo bookingRepo, IVehicleRepo vehicleRepo, IBranchRepository branchRepository, IVehicleBranchRepository vehicleBranchRepository)
+    public BookingService(IBookingRepo bookingRepo, IBranchRepository branchRepository, IVehicleBranchRepository vehicleBranchRepository, IVehicleRepo vehicleRepo)
     {
         _bookingRepo = bookingRepo;
         _branchRepository = branchRepository;
@@ -23,7 +23,19 @@ public class BookingService
     {
         // Create the booking
         await _bookingRepo.CreateBooking(booking);
+        
+        var vehicleBranches = await _vehicleBranchRepository.GetVehicleBranches();
+        var vehicleBranch = vehicleBranches.FirstOrDefault(vb => vb.BranchId == booking.PickupBranchId && vb.VehicleId == booking.VehicleId);
 
+        if (vehicleBranch != null)
+        {
+            vehicleBranch.IsAvailable = false;
+            await _vehicleBranchRepository.UpdateVehicleBranch(vehicleBranch);
+        }
+        else
+        {
+            Console.WriteLine("VehicleBranch not found.");
+        }
     }
 
     public async Task EndBooking(Booking booking)
@@ -33,7 +45,31 @@ public class BookingService
 
         if (booking.DropoffBranchId.HasValue && booking.DropoffBranchId.Value != booking.PickupBranchId)
         {
-            await MoveVehicleToBranch(booking.VehicleId, booking.PickupBranchId, booking.DropoffBranchId.Value);
+            var vehicleBranches = await _vehicleBranchRepository.GetVehicleBranches();
+            var oldVB = vehicleBranches.FirstOrDefault(vb => vb.BranchId == booking.PickupBranchId && vb.VehicleId == booking.VehicleId);
+
+            var newVB = new VehicleBranch
+            {
+                Rate = oldVB.Rate,
+                BranchId = booking.DropoffBranchId.Value,
+                VehicleId = oldVB.VehicleId,
+                IsAvailable = true
+            };
+            await _vehicleBranchRepository.CreateVehicleBranch(newVB);
+        }
+        else
+        {
+            var vehicleBranches = await _vehicleBranchRepository.GetVehicleBranches();
+            var vehicleBranch = vehicleBranches.FirstOrDefault(vb => vb.BranchId == booking.PickupBranchId && vb.VehicleId == booking.VehicleId);
+            if (vehicleBranch != null)
+            {
+                vehicleBranch.IsAvailable = true;
+                await _vehicleBranchRepository.UpdateVehicleBranch(vehicleBranch);
+            }
+            else
+            {
+                Console.WriteLine("VehicleBranch not found.");
+            }
         }
     }
 
@@ -49,25 +85,32 @@ public class BookingService
     
     public async Task<List<SelectListItem>> GetVehiclesByBranchAsync(int branchId)
     {
-        var bookings = await _bookingRepo.GetAllBookings();
-        var vehicles = bookings.Where(b => b.EndTime != null && b.PickupBranchId == branchId)
-                                .Select(b => b.Vehicle)
-                                .Distinct()
-                                .ToList();
+        // Check in VehicleBranch
+        var vehicleBranches = await _vehicleBranchRepository.GetVehicleBranches();
+        var vehicleIDs = vehicleBranches.Where(vb => vb.BranchId == branchId && vb.IsAvailable == true) 
+                                        .Select(vb => vb.VehicleId) 
+                                        .Distinct()
+                                        .ToList();
+
+        var vehicles = new List<Vehicle>();
+        foreach (var vehicleId in vehicleIDs)
+        {
+            var vehicle = await _vehicleRepo.GetVehicle(vehicleId);
+            if (vehicle != null)
+            {
+                vehicles.Add(vehicle);
+            }
+        }
 
         // Turn individual vehicles into SelectListItem
         var list = new List<SelectListItem>();
         foreach (var vehicle in vehicles)
         {
-            //var vehicle = await _vehicleRepo.GetVehicle(vehicleBranch.VehicleId);
-            if (vehicle != null)
+            list.Add(new SelectListItem
             {
-                list.Add(new SelectListItem
-                {
-                    Value = vehicle.VehicleId.ToString(),
-                    Text = vehicle.Make + " " + vehicle.Model
-                });
-            }
+                Value = vehicle.VehicleId.ToString(),
+                Text = vehicle.Make + " " + vehicle.Model
+            });
         }
         return list;
     }
@@ -78,20 +121,20 @@ public class BookingService
         return bookings;
     }
 
-    public async Task MoveVehicleToBranch(int vehicleId, int oldBranchId, int newBranchId)
-    {
-        var vehicleBranches = await _vehicleBranchRepository.GetVehicleBranches();
-        var vehicleBranch = vehicleBranches.FirstOrDefault(vb => vb.VehicleId == vehicleId && vb.BranchId == oldBranchId);
-        if (vehicleBranch != null)
-        {
-            vehicleBranch.BranchId = newBranchId;
-            await _vehicleBranchRepository.UpdateVehicleBranch(vehicleBranch);
-        }
-        else
-        {
-            throw new InvalidOperationException($"VehicleBranch with VehicleId {vehicleId} and BranchId {oldBranchId} not found.");
-        }
-    }
+    // public async Task MoveVehicleToBranch(int vehicleId, int oldBranchId, int newBranchId)
+    // {
+    //     var vehicleBranches = await _vehicleBranchRepository.GetVehicleBranches();
+    //     var vehicleBranch = vehicleBranches.FirstOrDefault(vb => vb.VehicleId == vehicleId && vb.BranchId == oldBranchId);
+    //     if (vehicleBranch != null)
+    //     {
+    //         vehicleBranch.BranchId = newBranchId;
+    //         await _vehicleBranchRepository.UpdateVehicleBranch(vehicleBranch);
+    //     }
+    //     else
+    //     {
+    //         throw new InvalidOperationException($"VehicleBranch with VehicleId {vehicleId} and BranchId {oldBranchId} not found.");
+    //     }
+    // }
 
     public async Task<bool> IsVehicleAssignedToBranch(int vehicleId, int branchId)
     {
