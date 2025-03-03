@@ -26,6 +26,8 @@ if (builder.Environment.IsDevelopment())
 // Register the BookingService
 builder.Services.AddScoped<BookingService>();
 
+// Register the ExportBackgroundService
+builder.Services.AddHostedService<ExportBackgroundService>();
 
 var app = builder.Build();
 

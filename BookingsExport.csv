@@ -1,0 +1,9 @@
+BookingId,CustomerName,Vehicle,PickupBranch,DropoffBranch,StartTime,EndTime
+1,John Smith,BMW 320d,Austin Branch,Phoenix Branch,01/02/2025 12:00:00 AM,11/02/2025 12:00:00 AM
+2,Matthew Johnson,Audi A4,Dallas Branch,Houston Branch,02/02/2025 12:00:00 AM,05/02/2025 12:00:00 AM
+3,Harry Brown,Tesla Model S,Houston Branch,Dallas Branch,03/02/2025 12:00:00 AM,06/02/2025 12:00:00 AM
+4,Paul Johnson,Toyota Prius,Phoenix Branch,Austin Branch,03/02/2025 12:00:00 AM,06/02/2025 12:00:00 AM
+5,John Smith,Tesla Model S,Dallas Branch,Dallas Branch,17/02/2025 9:47:00 PM,17/02/2025 10:06:00 PM
+6,Paul,Audi A4,Dallas Branch,Dallas Branch,17/02/2025 10:11:00 PM,17/02/2025 10:11:00 PM
+7,Josh,Audi A4,Dallas Branch,Phoenix Branch,17/02/2025 10:12:00 PM,17/02/2025 10:12:00 PM
+13,Jack,Toyota Prius,Phoenix Branch,Houston Branch,17/02/2025 10:16:00 PM,17/02/2025 10:19:00 PM
