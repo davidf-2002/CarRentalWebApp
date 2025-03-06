@@ -1,21 +1,34 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using CarRentalWebApp.Models;
+using CarRentalWebApp.Repository; // Ensure this namespace contains IVehicleRepo
+using CarRentalWebApp.Data;
 
 namespace CarRentalWebApp.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly IVehicleRepo _vehicleRepo;
+    private readonly IBranchRepository _branchRepository;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(IVehicleRepo vehicleRepo, IBranchRepository branchRepository)
     {
-        _logger = logger;
+        _vehicleRepo = vehicleRepo;
+        _branchRepository = branchRepository;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var vehicles = await _vehicleRepo.GetVehicles();
+        var branches = await _branchRepository.GetBranches();
+
+        var viewModel = new HomeViewModel
+        {
+            Vehicles = vehicles,
+            Branches = branches
+        };
+
+        return View(viewModel);
     }
 
     public IActionResult Privacy()

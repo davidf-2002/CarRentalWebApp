@@ -14,5 +14,6 @@ public class BookingViewModel
 
     public int SelectedBranchId { get; set; }
     public int SelectedVehicleId { get; set; }
+    public int SelectedVehicleBranchId { get; set; }
 
 }

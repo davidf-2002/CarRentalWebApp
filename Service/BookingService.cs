@@ -25,8 +25,9 @@ public class BookingService
         await _bookingRepo.CreateBooking(booking);
         
         var vehicleBranches = await _vehicleBranchRepository.GetVehicleBranches();
-        var vehicleBranch = vehicleBranches.FirstOrDefault(vb => vb.BranchId == booking.PickupBranchId && vb.VehicleId == booking.VehicleId);
+        //var vehicleBranch = vehicleBranches.FirstOrDefault(vb => vb.BranchId == booking.PickupBranchId && vb.VehicleId == booking.VehicleId);
 
+        var vehicleBranch = vehicleBranches.FirstOrDefault(vb => vb.VehicleBranchId == booking.VehicleBranchId);
         if (vehicleBranch != null)
         {
             vehicleBranch.IsAvailable = false;
@@ -87,30 +88,21 @@ public class BookingService
     {
         // Check in VehicleBranch
         var vehicleBranches = await _vehicleBranchRepository.GetVehicleBranches();
-        var vehicleIDs = vehicleBranches.Where(vb => vb.BranchId == branchId && vb.IsAvailable == true) 
-                                        .Select(vb => vb.VehicleId) 
-                                        .Distinct()
-                                        .ToList();
+        var vehicleBranchList = vehicleBranches.Where(vb => vb.BranchId == branchId && vb.IsAvailable == true)
+                                            .ToList();
 
-        var vehicles = new List<Vehicle>();
-        foreach (var vehicleId in vehicleIDs)
+        var list = new List<SelectListItem>();
+        foreach (var vehicleBranch in vehicleBranchList)
         {
-            var vehicle = await _vehicleRepo.GetVehicle(vehicleId);
+            var vehicle = await _vehicleRepo.GetVehicle(vehicleBranch.VehicleId);
             if (vehicle != null)
             {
-                vehicles.Add(vehicle);
+                list.Add(new SelectListItem
+                {
+                    Value = vehicleBranch.VehicleBranchId.ToString(),
+                    Text = $"{vehicle.Make} {vehicle.Model} (Rate: {vehicleBranch.Rate})"
+                });
             }
-        }
-
-        // Turn individual vehicles into SelectListItem
-        var list = new List<SelectListItem>();
-        foreach (var vehicle in vehicles)
-        {
-            list.Add(new SelectListItem
-            {
-                Value = vehicle.VehicleId.ToString(),
-                Text = vehicle.Make + " " + vehicle.Model
-            });
         }
         return list;
     }
@@ -141,5 +133,12 @@ public class BookingService
         var vehicleBranches = await _vehicleBranchRepository.GetVehicleBranches();
         var vehicleBranch = vehicleBranches.FirstOrDefault(vb => vb.VehicleId == vehicleId && vb.BranchId == branchId);
         return vehicleBranch != null;
+    }
+
+    public async Task<int> GetVehicleIdByVb(int id)
+    {
+        var vehicleBranch = await _vehicleBranchRepository.GetVehicleBranch(id);
+        var vehicleId = vehicleBranch.VehicleId;
+        return vehicleId;
     }
 }

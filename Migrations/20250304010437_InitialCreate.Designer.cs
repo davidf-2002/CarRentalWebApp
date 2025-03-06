@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalWebApp.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20250217210537_InitialCreate")]
+    [Migration("20250304010437_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -42,6 +42,9 @@ namespace CarRentalWebApp.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("VehicleBranchId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("VehicleId")
                         .HasColumnType("INTEGER");
 
@@ -50,6 +53,8 @@ namespace CarRentalWebApp.Migrations
                     b.HasIndex("DropoffBranchId");
 
                     b.HasIndex("PickupBranchId");
+
+                    b.HasIndex("VehicleBranchId");
 
                     b.HasIndex("VehicleId");
 
@@ -64,6 +69,7 @@ namespace CarRentalWebApp.Migrations
                             EndTime = new DateTime(2025, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PickupBranchId = 1,
                             StartTime = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            VehicleBranchId = 1,
                             VehicleId = 1
                         },
                         new
@@ -74,6 +80,7 @@ namespace CarRentalWebApp.Migrations
                             EndTime = new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PickupBranchId = 2,
                             StartTime = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            VehicleBranchId = 2,
                             VehicleId = 2
                         },
                         new
@@ -84,6 +91,7 @@ namespace CarRentalWebApp.Migrations
                             EndTime = new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PickupBranchId = 3,
                             StartTime = new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            VehicleBranchId = 3,
                             VehicleId = 3
                         },
                         new
@@ -94,6 +102,7 @@ namespace CarRentalWebApp.Migrations
                             EndTime = new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PickupBranchId = 4,
                             StartTime = new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            VehicleBranchId = 4,
                             VehicleId = 4
                         });
                 });
@@ -213,7 +222,9 @@ namespace CarRentalWebApp.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsAvailable")
-                        .HasColumnType("INTEGER");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
 
                     b.Property<int>("Rate")
                         .HasColumnType("INTEGER");
@@ -308,6 +319,12 @@ namespace CarRentalWebApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CarRentalWebApp.Models.VehicleBranch", "VehicleBranch")
+                        .WithMany()
+                        .HasForeignKey("VehicleBranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CarRentalWebApp.Models.Vehicle", "Vehicle")
                         .WithMany("Bookings")
                         .HasForeignKey("VehicleId")
@@ -319,6 +336,8 @@ namespace CarRentalWebApp.Migrations
                     b.Navigation("PickupBranch");
 
                     b.Navigation("Vehicle");
+
+                    b.Navigation("VehicleBranch");
                 });
 
             modelBuilder.Entity("CarRentalWebApp.Models.VehicleBranch", b =>

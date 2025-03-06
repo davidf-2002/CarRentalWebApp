@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarRentalWebApp", "CarRentalWebApp.csproj", "{FB7E7167-E7FA-411E-82B0-F8234AD6AFB6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRentalWebApp.Tests", "..\CarRentalWebApp.Tests\CarRentalWebApp.Tests.csproj", "{7CDC8F9C-3326-44B7-B883-C448F63DF746}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FB7E7167-E7FA-411E-82B0-F8234AD6AFB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB7E7167-E7FA-411E-82B0-F8234AD6AFB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB7E7167-E7FA-411E-82B0-F8234AD6AFB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CDC8F9C-3326-44B7-B883-C448F63DF746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CDC8F9C-3326-44B7-B883-C448F63DF746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CDC8F9C-3326-44B7-B883-C448F63DF746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CDC8F9C-3326-44B7-B883-C448F63DF746}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

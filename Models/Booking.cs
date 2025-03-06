@@ -22,4 +22,7 @@ public class Booking
     // Optional Drop off information
     public int? DropoffBranchId { get; set; }
     public Branch? DropoffBranch { get; set; }
+
+    public int VehicleBranchId { get; set; }
+    public VehicleBranch? VehicleBranch { get; set; }
 }

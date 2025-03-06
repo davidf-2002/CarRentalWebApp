@@ -44,6 +44,34 @@ namespace CarRentalWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "VehicleBranches",
+                columns: table => new
+                {
+                    VehicleBranchId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Rate = table.Column<int>(type: "INTEGER", nullable: false),
+                    BranchId = table.Column<int>(type: "INTEGER", nullable: false),
+                    VehicleId = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VehicleBranches", x => x.VehicleBranchId);
+                    table.ForeignKey(
+                        name: "FK_VehicleBranches_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "BranchId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VehicleBranches_Vehicles_VehicleId",
+                        column: x => x.VehicleId,
+                        principalTable: "Vehicles",
+                        principalColumn: "VehicleId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Bookings",
                 columns: table => new
                 {
@@ -54,7 +82,8 @@ namespace CarRentalWebApp.Migrations
                     CustomerName = table.Column<string>(type: "TEXT", nullable: false),
                     VehicleId = table.Column<int>(type: "INTEGER", nullable: false),
                     PickupBranchId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DropoffBranchId = table.Column<int>(type: "INTEGER", nullable: true)
+                    DropoffBranchId = table.Column<int>(type: "INTEGER", nullable: true),
+                    VehicleBranchId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,35 +100,13 @@ namespace CarRentalWebApp.Migrations
                         principalColumn: "BranchId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Bookings_VehicleBranches_VehicleBranchId",
+                        column: x => x.VehicleBranchId,
+                        principalTable: "VehicleBranches",
+                        principalColumn: "VehicleBranchId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Bookings_Vehicles_VehicleId",
-                        column: x => x.VehicleId,
-                        principalTable: "Vehicles",
-                        principalColumn: "VehicleId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "VehicleBranches",
-                columns: table => new
-                {
-                    VehicleBranchId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Rate = table.Column<int>(type: "INTEGER", nullable: false),
-                    BranchId = table.Column<int>(type: "INTEGER", nullable: false),
-                    VehicleId = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsAvailable = table.Column<bool>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_VehicleBranches", x => x.VehicleBranchId);
-                    table.ForeignKey(
-                        name: "FK_VehicleBranches_Branches_BranchId",
-                        column: x => x.BranchId,
-                        principalTable: "Branches",
-                        principalColumn: "BranchId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_VehicleBranches_Vehicles_VehicleId",
                         column: x => x.VehicleId,
                         principalTable: "Vehicles",
                         principalColumn: "VehicleId",
@@ -129,17 +136,6 @@ namespace CarRentalWebApp.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Bookings",
-                columns: new[] { "BookingId", "CustomerName", "DropoffBranchId", "EndTime", "PickupBranchId", "StartTime", "VehicleId" },
-                values: new object[,]
-                {
-                    { 1, "John Smith", 4, new DateTime(2025, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { 2, "Matthew Johnson", 3, new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
-                    { 3, "Harry Brown", 2, new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
-                    { 4, "Paul Johnson", 1, new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 4 }
-                });
-
-            migrationBuilder.InsertData(
                 table: "VehicleBranches",
                 columns: new[] { "VehicleBranchId", "BranchId", "IsAvailable", "Rate", "VehicleId" },
                 values: new object[,]
@@ -147,11 +143,29 @@ namespace CarRentalWebApp.Migrations
                     { 1, 4, true, 110, 1 },
                     { 2, 3, true, 125, 2 },
                     { 3, 2, true, 95, 3 },
-                    { 4, 1, true, 135, 4 },
-                    { 5, 1, false, 105, 1 },
-                    { 6, 2, false, 88, 2 },
-                    { 7, 3, false, 120, 3 },
-                    { 8, 4, false, 130, 4 }
+                    { 4, 1, true, 135, 4 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "VehicleBranches",
+                columns: new[] { "VehicleBranchId", "BranchId", "Rate", "VehicleId" },
+                values: new object[,]
+                {
+                    { 5, 1, 105, 1 },
+                    { 6, 2, 88, 2 },
+                    { 7, 3, 120, 3 },
+                    { 8, 4, 130, 4 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Bookings",
+                columns: new[] { "BookingId", "CustomerName", "DropoffBranchId", "EndTime", "PickupBranchId", "StartTime", "VehicleBranchId", "VehicleId" },
+                values: new object[,]
+                {
+                    { 1, "John Smith", 4, new DateTime(2025, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1 },
+                    { 2, "Matthew Johnson", 3, new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 2 },
+                    { 3, "Harry Brown", 2, new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 3 },
+                    { 4, "Paul Johnson", 1, new DateTime(2025, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, 4 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -163,6 +177,11 @@ namespace CarRentalWebApp.Migrations
                 name: "IX_Bookings_PickupBranchId",
                 table: "Bookings",
                 column: "PickupBranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_VehicleBranchId",
+                table: "Bookings",
+                column: "VehicleBranchId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_VehicleId",

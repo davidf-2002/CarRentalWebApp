@@ -39,29 +39,17 @@ public class BookingController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(BookingViewModel viewModel)
     {
-        // Get the selected branch ID and vehicle ID from the view model
         var selectedBranchId = viewModel.SelectedBranchId;
-        var selectedVehicleId = viewModel.SelectedVehicleId;
+        var selectedVehicleBranchId = viewModel.SelectedVehicleBranchId;
 
         viewModel.Booking.PickupBranchId = selectedBranchId;
-        viewModel.Booking.VehicleId = selectedVehicleId;
+        viewModel.Booking.VehicleBranchId = selectedVehicleBranchId; 
+
+        var vehicleId = await _service.GetVehicleIdByVb(selectedVehicleBranchId);
+        viewModel.Booking.VehicleId = vehicleId;
 
         if (ModelState.IsValid)
         {
-            // Check if VehicleBranch exists for selected Vehicle & Branch
-            bool isAssigned = await _service.IsVehicleAssignedToBranch(selectedVehicleId, selectedBranchId);
-            
-            if (!isAssigned)
-            {
-                ModelState.AddModelError("", "The selected vehicle is not assigned to this branch.");
-                
-                // Reload dropdowns before returning to the view
-                viewModel.Branches = await _service.GetBranchesAsync();
-                viewModel.Vehicles = await _service.GetVehiclesByBranchAsync(selectedBranchId);
-
-                return View(viewModel);
-            }
-
             // Create Booking
             var booking = viewModel.Booking; // Map ViewModel back to Booking model
             await _service.CreateBooking(booking);
