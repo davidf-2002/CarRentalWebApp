@@ -66,37 +66,106 @@ public class ExportBackgroundService : BackgroundService
             }
 
             var rootPath = Directory.GetCurrentDirectory();
-            var filePath = Path.Combine(rootPath, "BookingsExport.csv");
+            var preProcessFolderPath = Path.Combine(rootPath, "Pre-process", "data");
+
+            // Ensure the Pre-process/data folder exists
+            if (!Directory.Exists(preProcessFolderPath))
+            {
+                Directory.CreateDirectory(preProcessFolderPath);
+            }
+
+            var filePath = Path.Combine(preProcessFolderPath, "NewCarRental.csv");
             await System.IO.File.WriteAllTextAsync(filePath, csv.ToString());
 
-            // RunPythonScript(filePath);
+
+            RunPythonScripts(filePath);
         }
     }
 
-    // private void RunPythonScript(string filePath)
-    // {
-    //     var psi = new ProcessStartInfo
-    //     {
-    //         FileName = "python",
-    //         Arguments = $"path/to/script.py {filePath}",
-    //         RedirectStandardOutput = true,
-    //         RedirectStandardError = true,
-    //         UseShellExecute = false,
-    //         CreateNoWindow = true
-    //     };
+    private void RunPythonScripts(string inputFilePath)
+    {
+        // Get the current working directory of the application
+        var currentDir = Directory.GetCurrentDirectory();
 
-    //     using (var process = Process.Start(psi))
-    //     {
-    //         process.WaitForExit();
-    //         var output = process.StandardOutput.ReadToEnd();
-    //         var error = process.StandardError.ReadToEnd();
+        // Path to the Python executable within the bundled virtual environment
+        var pythonExePath = Path.Combine(currentDir, "venv", "Scripts", "python.exe");
 
-    //         if (!string.IsNullOrEmpty(error))
-    //         {
-    //             throw new Exception($"Python script error: {error}");
-    //         }
+        // Paths to your Python scripts (adjust the relative paths as needed)
+        var preprocessingUtilsPath = Path.Combine(currentDir, "Pre-process", "preprocessing_utils.py");
+        var preprocessDataPath = Path.Combine(currentDir, "Pre-process", "preprocess_data.py");
 
-    //         Console.WriteLine(output);
-    //     }
-    // }
+        // Run preprocessing_utils.py first
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = pythonExePath,
+            Arguments = $"\"{preprocessingUtilsPath}\"",  // Run the preprocessing_utils.py script
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        using (var process = new Process { StartInfo = startInfo })
+        {
+            process.OutputDataReceived += (sender, args) =>
+            {
+                if (!string.IsNullOrEmpty(args.Data))
+                {
+                    Console.WriteLine("Output: " + args.Data);
+                }
+            };
+            process.ErrorDataReceived += (sender, args) =>
+            {
+                if (!string.IsNullOrEmpty(args.Data))
+                {
+                    Console.WriteLine("Error: " + args.Data);
+                }
+            };
+
+            try
+            {
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                process.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error running preprocessing_utils.py: {ex.Message}");
+            }
+        }
+
+        // Now run preprocess_data.py with the CSV file path as an argument
+        startInfo.Arguments = $"\"{preprocessDataPath}\" \"{inputFilePath}\"";
+        using (var process2 = new Process { StartInfo = startInfo })
+        {
+            process2.OutputDataReceived += (sender, args) =>
+            {
+                if (!string.IsNullOrEmpty(args.Data))
+                {
+                    Console.WriteLine("Output: " + args.Data);
+                }
+            };
+            process2.ErrorDataReceived += (sender, args) =>
+            {
+                if (!string.IsNullOrEmpty(args.Data))
+                {
+                    Console.WriteLine("Error: " + args.Data);
+                }
+            };
+
+            try
+            {
+                process2.Start();
+                process2.BeginOutputReadLine();
+                process2.BeginErrorReadLine();
+                process2.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error running preprocess_data.py: {ex.Message}");
+            }
+        }
+    }
+
 }
