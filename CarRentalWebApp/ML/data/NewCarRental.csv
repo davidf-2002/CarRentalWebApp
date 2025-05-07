@@ -1,0 +1,15 @@
+pickUp.city,rate.daily,vehicle.make,vehicle.model,vehicle.year,dropOff.city,pickup_date,dropoff_date,vehicle_id
+Austin,105,BMW,320d,2017,Phoenix,01/02/2025 12:00:00 AM,11/02/2025 12:00:00 AM,1
+Dallas,88,Audi,A4,2018,Houston,02/02/2025 12:00:00 AM,05/02/2025 12:00:00 AM,2
+Houston,120,Tesla,Model S,2020,Dallas,03/02/2025 12:00:00 AM,06/02/2025 12:00:00 AM,3
+Houston,102,Tesla,Model S,2020,Dallas,03/02/2025 12:00:00 AM,06/02/2025 12:00:00 AM,3
+Phoenix,130,Toyota,Prius,2019,Austin,03/02/2025 12:00:00 AM,06/02/2025 12:00:00 AM,4
+Phoenix,135,Toyota,Prius,2019,Austin,03/02/2025 12:00:00 AM,06/02/2025 12:00:00 AM,4
+Austin,135,Toyota,Prius,2019,Phoenix,04/03/2025 1:23:00 AM,04/03/2025 1:27:00 AM,4
+Austin,200,Toyota,Prius,2019,Phoenix,04/03/2025 1:23:00 AM,04/03/2025 1:27:00 AM,4
+Houston,200,Toyota,Prius,2019,Houston,04/03/2025 1:29:00 AM,04/03/2025 1:29:00 AM,4
+Houston,200,Toyota,Prius,2019,Austin,04/03/2025 1:29:00 AM,04/03/2025 1:30:00 AM,4
+Phoenix,110,BMW,320d,2017,Phoenix,04/03/2025 1:33:00 AM,04/03/2025 11:31:00 AM,1
+New York,90,Toyota,Yaris,2020,Phoenix,04/03/2025 1:37:00 AM,04/03/2025 1:38:00 AM,5
+New York,100,Toyota,Yaris,2020,Phoenix,04/03/2025 1:37:00 AM,04/03/2025 1:38:00 AM,5
+New York,102,Tesla,Model S,2020,Houston,11/03/2025 5:14:00 PM,11/03/2025 5:15:00 PM,3

@@ -1,0 +1,42 @@
+@model CarRentalWebApp.Models.BookingViewModel
+
+@{
+    ViewData["Title"] = "End Booking";
+    var currentDateTime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
+}
+
+<h1>End Booking</h1>
+
+<form asp-action="EndConfirmed" method="post">
+    <input type="hidden" asp-for="Booking.BookingId" />
+    <input type="hidden" asp-for="Booking.PickupBranchId" />
+    <input type="hidden" asp-for="Booking.VehicleId" />
+
+    <div class="form-group">
+        <label asp-for="Booking.CustomerName" class="control-label">Customer Name</label>
+        <input asp-for="Booking.CustomerName" class="form-control" readonly />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Booking.StartTime" class="control-label">Start Time</label>
+        <input asp-for="Booking.StartTime" class="form-control" readonly />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Booking.EndTime" class="control-label">End Time</label>
+        <input asp-for="Booking.EndTime" class="form-control" value="@currentDateTime"/>
+        <span asp-validation-for="Booking.EndTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Booking.DropoffBranchId" class="control-label">Drop-off Branch</label>
+        <select asp-for="Booking.DropoffBranchId" class="form-control" asp-items="Model.Branches">
+            <option value="">-- Select a Branch --</option>
+        </select>
+        <span asp-validation-for="Booking.DropoffBranchId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="End Booking" class="btn btn-primary" />
+    </div>
+</form>

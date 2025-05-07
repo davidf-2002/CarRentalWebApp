@@ -1,0 +1,85 @@
+/* site.css */
+
+html {
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  color: #343a40;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.navbar {
+  background-color: #343a40;
+}
+
+.navbar-brand, .nav-link {
+  color: #ffffff;
+}
+
+.nav-link:hover {
+  color: #d4d4d4;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.table {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.table th, .table td {
+  padding: 1rem;
+  vertical-align: middle;
+  border-top: 1px solid #dee2e6;
+}
+
+.table thead th {
+  background-color: #343a40;
+  color: #ffffff;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.footer {
+  background-color: #343a40;
+  color: #ffffff;
+  padding: 1rem 0;
+  text-align: center;
+  margin-top: auto;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}

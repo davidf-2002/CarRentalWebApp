@@ -1,0 +1,39 @@
+@model IEnumerable<CarRentalWebApp.Models.Vehicle>
+
+@{
+    ViewData["Title"] = "Vehicles";
+}
+
+<h1>Vehicles</h1>
+
+<p>
+    <input type="button" value="Create" onclick="location.href='@Url.Action("Create", "Vehicle")'" class="btn btn-primary" />
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Vehicle ID</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vehicle in Model)
+        {
+            <tr>
+                <td>@vehicle.VehicleId</td>
+                <td>@vehicle.Make</td>
+                <td>@vehicle.Model</td>
+                <td>@vehicle.Year</td>
+                <td>@vehicle.Type</td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@vehicle.VehicleId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,69 @@
+@model CarRentalWebApp.Models.BookingViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    var currentDateTime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
+
+}
+
+<h1>Create Booking</h1>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    
+    <div class="form-group">
+        <label asp-for="Booking.CustomerName" class="control-label">Customer Name</label>
+        <input asp-for="Booking.CustomerName" class="form-control" />
+        <span asp-validation-for="Booking.CustomerName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SelectedBranchId" class="control-label">Branch</label>
+        <select asp-for="SelectedBranchId" class="form-control" asp-items="Model.Branches" id="branchDropdown">
+            <option value="">-- Select a Branch --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SelectedVehicleBranchId" class="control-label">Vehicle</label>
+        <select asp-for="SelectedVehicleBranchId" class="form-control" asp-items="Model.Vehicles" id="vehicleDropdown">
+            <option value="">-- Select a Vehicle --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Booking.StartTime" class="control-label">Start Date</label>
+        <input asp-for="Booking.StartTime" class="form-control" value="@currentDateTime"/>
+        <span asp-validation-for="Booking.StartTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.getElementById('branchDropdown').addEventListener('change', function () {
+            var branchId = this.value;
+
+            if (branchId) {
+                fetch(`/Booking/GetVehiclesByBranch?branchId=${branchId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        var vehicleDropdown = document.getElementById('vehicleDropdown');
+                        vehicleDropdown.innerHTML = '<option value="">-- Select a Vehicle --</option>';
+
+                        data.forEach(vehicle => {
+                            var option = new Option(vehicle.text, vehicle.value);
+                            vehicleDropdown.add(option);
+                        });
+                    });
+            } else {
+                document.getElementById('vehicleDropdown').innerHTML = '<option value="">-- Select a Vehicle --</option>';
+            }
+        });
+    </script>
+}

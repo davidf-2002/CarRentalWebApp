@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@using System.Linq
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental Web App</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/site.css">
+</head>
+<body>
+
+    <section class="hero">
+        <div class="container text-center">
+            <h1>Welcome to CarRentalWebApp</h1>
+            <a asp-controller="Booking" asp-action = "Create" class="btn btn-primary">Book Now</a>
+        </div>
+    </section>
+
+    <section class="featured-vehicles">
+        <div class="container">
+            <h2>Featured Vehicles</h2>
+            <div class="row">
+                @for (int i = 0; i < 4 && i < Model.Vehicles.Count; i++)
+                {
+                    var vehicle = Model.Vehicles[i];
+                    <div class="col-md-3">
+                        <div class="card">
+                            <img src="~/images/vehicle-placeholder.jpg" class="card-img-top" alt="@vehicle.Make">
+                            <div class="card-body">
+                                <h5 class="card-title">@vehicle.Make</h5>
+                                <p class="card-text">@vehicle.Model</p>
+                                <a asp-controller="Vehicle" asp-action="Index" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <p>
+        <section class="branches">
+            <div class="container">
+                <h2>Our Branches</h2>
+                <div class="row">
+                    @for (int i = 0; i < 4 && i < Model.Branches.Count; i++)
+                    {
+                        var branch = Model.Branches[i];
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">@branch.Name</h5>
+                                    <p class="card-text">@branch.City</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+    </p>
+
+</body>
+</html>
